@@ -27,7 +27,6 @@ func Deploy(c *gin.Context) {
 
 		return
 	}
-	fmt.Println(body)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Failed to generate random string",
@@ -39,8 +38,6 @@ func Deploy(c *gin.Context) {
 		URL:      body.Url,
 		Progress: os.Stdout,
 	})
-
-	fmt.Println(err)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -67,6 +64,12 @@ func Deploy(c *gin.Context) {
 			"message" : "Failed to push to redis queue",
 		})
 	}
+
+	err = os.RemoveAll(folderPath)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
 
 	fmt.Println(gitrepo)
 	c.JSON(200, gin.H{

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/kalyanKumarPokkula/vercel-deploy/helpers"
@@ -33,7 +34,13 @@ func main() {
 		// upload build folder to s3 bucket
 		folderPath := "../output/"+task[1]+"/dist"
 		helpers.UploadBuildFolder(folderPath , task[1])
-        fmt.Println("Processing task:", task)
+
+		err = os.RemoveAll(dir)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+			fmt.Println("Processing task:", task)
         // Perform your task processing logic here
     }
 
